@@ -14,18 +14,21 @@ import javafx.beans.property.StringProperty;
  */
 public class inputPair {
 
-	inputPair(String process, Double arivalTime, Double burstTime) {
+	public inputPair(String process, Double arivalTime, Double burstTime) {
 		this.process.setValue(process);
 		this.arivalTime.setValue(arivalTime);
 		this.burstTime.setValue(burstTime);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "inputPair [process=" + process + ", arivalTime=" + arivalTime + ", burstTime=" + burstTime + "]";
+		return "inputPair [process=" + process.getValue() + ", arivalTime=" + arivalTime.getValue() + ", burstTime="
+				+ burstTime.getValue() + "]";
 	}
 
 	public String getProcess() {

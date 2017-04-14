@@ -6,6 +6,8 @@ package FCFS_algorithm;
 import java.util.*;
 
 import FileInputer.fileFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.lang.*;
 import java.io.*;
@@ -21,21 +23,17 @@ public class FCFS {
 	 */
 
 	private static double CT[] = new double[2000];
-	private static double TAT[] = new double[2000];
-	private static double WT[] = new double[2000];
+	private static double TAT;
+	private static double WT;
 
-	public List<outputPair> FCFS_Algo(List<inputPair> inList) {
-		out_list = new ArrayList<outputPair>();
+	public ObservableList<outputPair> FCFS_Algo(List<inputPair> inList) {
+		out_list = FXCollections.observableArrayList();
 		in_list = new ArrayList<inputPair>();
-		process_list = new ArrayList<processScheduling>();
 		out_list.clear();
 		in_list.clear();
-		process_list.clear();
 		Collections.sort(inList, new Comp());
 		for (int i = 0; i < CT.length; i++) {
 			CT[i] = 0.0;
-			WT[i] = 0.0;
-			TAT[i] = 0.0;
 		}
 		/*
 		 * Complication Time Calculation
@@ -44,17 +42,17 @@ public class FCFS {
 		for (int i = 1; i <= inList.size(); i++) {
 			if (inList.get(i - 1).getArivalTime() > CT[i - 1]) {
 				CT[i] = inList.get(i - 1).getArivalTime() + inList.get(i - 1).getBurstTime();
-				TAT[i] = CT[i] - inList.get(i - 1).getArivalTime();
-				WT[i] = TAT[i] - inList.get(i - 1).getBurstTime();
+				TAT = CT[i] - inList.get(i - 1).getArivalTime();
+				WT = TAT - inList.get(i - 1).getBurstTime();
 				out_list.add(new outputPair(inList.get(i - 1).getProcess(), inList.get(i - 1).getArivalTime(),
-						inList.get(i - 1).getBurstTime(), CT[i], TAT[i], WT[i]));
+						inList.get(i - 1).getBurstTime(), CT[i], TAT, WT));
 
 			} else {
 				CT[i] = CT[i - 1] + inList.get(i - 1).getBurstTime();
-				TAT[i] = CT[i] - inList.get(i - 1).getArivalTime();
-				WT[i] = TAT[i] - inList.get(i - 1).getBurstTime();
+				TAT = CT[i] - inList.get(i - 1).getArivalTime();
+				WT = TAT - inList.get(i - 1).getBurstTime();
 				out_list.add(new outputPair(inList.get(i - 1).getProcess(), inList.get(i - 1).getArivalTime(),
-						inList.get(i - 1).getBurstTime(), CT[i], TAT[i], WT[i]));
+						inList.get(i - 1).getBurstTime(), CT[i], TAT, WT));
 			}
 		}
 
@@ -80,13 +78,6 @@ public class FCFS {
 			System.out.print(CT[i] + " ");
 		}
 		System.out.println();
-		for (int i = 0; i <= num; i++) {
-			System.out.print(TAT[i] + " ");
-		}
-		System.out.println();
-		for (int i = 0; i <= num; i++) {
-			System.out.print(WT[i] + " ");
-		}
 		System.out.println("=====================");
 		for (int i = 0; i < out_list.size(); i++) {
 			System.out.println(out_list.get(i));
@@ -94,8 +85,7 @@ public class FCFS {
 
 	}
 
-	private static List<outputPair> out_list;
+	private static ObservableList<outputPair> out_list;
 	private static List<inputPair> in_list;
-	private List<processScheduling> process_list;
 	private static Scanner scanner = fileFactory.scanner();
 }

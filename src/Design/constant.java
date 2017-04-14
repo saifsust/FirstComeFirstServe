@@ -14,7 +14,7 @@ public interface constant {
 	public static final double prefHeight = 50;
 	public static final double prefLabelWidth = width+10;
 	public static final double prefLabelHeight = 150;
-	public static final double panePrefHeight = 50;
+	public static final double panePrefHeight = 40;
 	public static final double columnPrefWidth = 80;
 	public static final double table_prefWidth = 240;
 	public static final double table_prefHeight = 300.0;

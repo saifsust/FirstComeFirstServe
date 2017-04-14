@@ -3,13 +3,17 @@
  */
 package Design;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import FCFS_algorithm.FCFS;
 import FCFS_algorithm.inputPair;
 import FCFS_algorithm.outputPair;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,20 +31,16 @@ import javafx.stage.Stage;
  * @author Saif_sust_2013331007
  *
  */
+
 public class appDesign extends Application implements constant {
 
-	private ObservableList inList = FXCollections.observableArrayList();
+	private ObservableList<outputPair> outList = FXCollections.observableArrayList();
+	private ObservableList<inputPair> inList = FXCollections.observableArrayList();
 
-	/**
-	 * 
-	 */
 	public appDesign() {
 
 	}
 
-	/**
-	 * 
-	 */
 	public appDesign(Stage primaryStage) {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
@@ -70,16 +70,41 @@ public class appDesign extends Application implements constant {
 	 */
 	private void configPane() {
 		Pane pane = new panel(10.0, table_prefHeight + prefLabelHeight + 90);
-		double x = 2.0;
-		TextField TFP = new textField("Process", x, 8.0);
+		double x = 0.0, y = 5.0;
+		final TextField TFP = new textField("Process", x, y);
 		pane.getChildren().add(TFP);
-		TextField TFA = new textField("Arival Time", x + columnPrefWidth, 8.0);
+		final TextField TFA = new textField("Arival Time", x + columnPrefWidth, y);
 		pane.getChildren().add(TFA);
-		TextField TFB = new textField("Burst Time", x + 2.0 * columnPrefWidth, 8.0);
+		final TextField TFB = new textField("Burst Time", x + 2.0 * columnPrefWidth, y);
 		pane.getChildren().add(TFB);
-		Button add = new button("ADD", x + 3.0 * columnPrefWidth + 10, 8.0, columnPrefWidth - 20, 30);
+		Button add = new button("ADD", x + 3.0 * columnPrefWidth + 10, y, columnPrefWidth - 20, 30);
 		pane.getChildren().add(add);
 		root.getChildren().add(pane);
+
+		add.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				if (!TFP.getText().trim().isEmpty() && !TFA.getText().trim().isEmpty()
+						&& !TFB.getText().trim().isEmpty()) {
+					// System.out.println("Ok done");
+					String pr = TFP.getText();
+					String AT = TFA.getText();
+					String BT = TFB.getText();
+					double at = Double.parseDouble(AT);
+					double bt = Double.parseDouble(BT);
+					inList.add(new inputPair(pr, at, bt));
+					in.setItems(inList);
+					TFP.clear();
+					TFA.clear();
+					TFB.clear();
+
+				}
+			}
+
+		});
+
 	}
 
 	private void Scroll() {
@@ -98,6 +123,38 @@ public class appDesign extends Application implements constant {
 		inScroll.setContent(in);
 		root.getChildren().add(inScroll);
 		root.getChildren().add(outScroll);
+		Button start = new button("START", outX + 80.0, y + table_prefHeight + 90, 150.0, 40.0);
+		root.getChildren().add(start);
+		start.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+
+				if (!inList.isEmpty()) {
+					// System.out.println("Ok done Start");
+					outList = new FCFS().FCFS_Algo(inList);
+					out.setItems(outList);
+				}
+			}
+
+		});
+
+		Button clear = new button("clear", outX + 260, y + table_prefHeight + 90, 150, 40);
+		root.getChildren().add(clear);
+		clear.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				if (!outList.isEmpty()) {
+					outList.clear();
+				}
+				if (!inList.isEmpty()) {
+					inList.clear();
+				}
+			}
+
+		});
+
 	}
 
 	private void processColumn() {
@@ -164,7 +221,7 @@ public class appDesign extends Application implements constant {
 		OutTAT.setMaxWidth(columnPrefWidth);
 		OutTAT.setEditable(false);
 		OutTAT.setResizable(false);
-		OutTAT.setCellValueFactory(new PropertyValueFactory<outputPair, Double>("complictionTime"));
+		OutTAT.setCellValueFactory(new PropertyValueFactory<outputPair, Double>("turnArroundTime"));
 		out.getColumns().add(OutTAT);
 
 	}
@@ -174,7 +231,7 @@ public class appDesign extends Application implements constant {
 		OutWT.setMaxWidth(columnPrefWidth);
 		OutWT.setEditable(false);
 		OutWT.setResizable(false);
-		OutWT.setCellValueFactory(new PropertyValueFactory<outputPair, Double>("complictionTime"));
+		OutWT.setCellValueFactory(new PropertyValueFactory<outputPair, Double>("waitingTime"));
 		out.getColumns().add(OutWT);
 
 	}

@@ -19,7 +19,7 @@ public class panel extends Pane implements constant {
 		super.setLayoutX(layoutX);
 		super.setLayoutY(layoutY);
 		super.setPrefSize(table_prefWidth+80, panePrefHeight);
-		super.setStyle("-fx-background-color: GREEN;");
+	//	super.setStyle("-fx-background-color: GREEN;");
 
 	}
 
