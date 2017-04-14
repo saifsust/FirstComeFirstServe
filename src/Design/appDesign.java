@@ -3,6 +3,7 @@
  */
 package Design;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.DataFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -36,6 +38,10 @@ import javafx.stage.Stage;
 
 public class appDesign extends Application implements constant {
 
+	private final String titleColor = "#8BC34A";
+	private final String inLabelColor = "#00BFA5";
+	private final String outLabelColor = "#00BFA5";
+	private final String outLColor = "#D4E157";
 	private ObservableList<outputPair> outList = FXCollections.observableArrayList();
 	private ObservableList<inputPair> inList = FXCollections.observableArrayList();
 
@@ -61,7 +67,7 @@ public class appDesign extends Application implements constant {
 		OutWTColumn();
 		Scroll();
 		root.getChildren()
-				.add(new label("First Come, First Serve", 0.0, 0.0, prefLabelWidth, prefLabelHeight, 24, "#ab47bc"));
+				.add(new label("First Come, First Serve", 0.0, 0.0, prefLabelWidth, prefLabelHeight, 35, titleColor));
 
 		configPane();
 
@@ -112,8 +118,8 @@ public class appDesign extends Application implements constant {
 	private void Scroll() {
 		double x = 10.0, y = prefLabelHeight + 10;
 		double outX = x + table_prefWidth + 80, outWidth = table_prefWidth * 2.0;
-		Label inlabel = new label("Input Table", x, y, table_prefWidth, 70, 12, "#ff6f00");
-		Label outlabel = new label("Output Table", outX, y, outWidth, 70, 12, "#ff6f00");
+		Label inlabel = new label("Input Table", x, y, table_prefWidth, 70, 20, inLabelColor);
+		Label outlabel = new label("Output Table", outX, y, outWidth, 70, 20, outLabelColor);
 		// label.setTextFill(Color.web("#ff6f00"));
 		root.getChildren().add(inlabel);
 		root.getChildren().add(outlabel);
@@ -125,8 +131,12 @@ public class appDesign extends Application implements constant {
 		inScroll.setContent(in);
 		root.getChildren().add(inScroll);
 		root.getChildren().add(outScroll);
-		Button start = new button("START", outX + 80.0, y + table_prefHeight + 90, 150.0, 40.0);
+		Button start = new button("START", outX - 90, y + table_prefHeight + 150, 150.0, 40.0);
 		root.getChildren().add(start);
+
+		final Label outL = new label("Averge TAT && Average WT ", outX, y + table_prefHeight + 70, outWidth, 70, 20,
+				outLColor);
+		root.getChildren().add(outL);
 		start.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -140,10 +150,23 @@ public class appDesign extends Application implements constant {
 					alert.setTitle("First Come, FIrst Serve");
 					alert.setHeaderText("Gantt Chart");
 					String text = "";
+					double s = 0.0;
+					double TAT = 0.0, WT = 0.0;
 					for (int i = 0; i < outList.size(); i++) {
-						text += " [ " + outList.get(i).getArivalTime() + " " + outList.get(i).getProcess() + " "
+						TAT += outList.get(i).getTurnArroundTime();
+						WT += outList.get(i).getWaitingTime();
+						s = outList.get(i).getArivalTime();
+						if (i > 0 && s < outList.get(i - 1).getComplictionTime()) {
+							s = outList.get(i - 1).getComplictionTime();
+						}
+						text += " [ " + s + " ~" + outList.get(i).getProcess() + " ~"
 								+ outList.get(i).getComplictionTime() + "] ";
 					}
+					outL.setText(null);
+					double AV_TAT = Math.floor((TAT / outList.size()) * 100.0);
+					double AV_WT = Math.floor((WT / outList.size()) * 100.0);
+					String str = "Average TAT = " + AV_TAT / 100.0 + "  Average WT = " + AV_WT / 100.0;
+					outL.setText(str);
 					alert.setContentText(text);
 					alert.showAndWait();
 				}
@@ -151,12 +174,13 @@ public class appDesign extends Application implements constant {
 
 		});
 
-		Button clear = new button("clear", outX + 260, y + table_prefHeight + 90, 150, 40);
+		Button clear = new button("clear", outX + 150, y + table_prefHeight + 150, 150, 40);
 		root.getChildren().add(clear);
 		clear.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
+				outL.setText(null);
 				if (!outList.isEmpty()) {
 					outList.clear();
 				}

@@ -9,7 +9,7 @@ package Design;
  */
 public interface constant {
 	public static final double width = 820.0;
-	public static final double height = 600.0;
+	public static final double height = 660.0;
 	public static final double prefWidth = 100;
 	public static final double prefHeight = 50;
 	public static final double prefLabelWidth = width+10;
