@@ -16,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -134,6 +136,16 @@ public class appDesign extends Application implements constant {
 					// System.out.println("Ok done Start");
 					outList = new FCFS().FCFS_Algo(inList);
 					out.setItems(outList);
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("First Come, FIrst Serve");
+					alert.setHeaderText("Gantt Chart");
+					String text = "";
+					for (int i = 0; i < outList.size(); i++) {
+						text += " [ " + outList.get(i).getArivalTime() + " " + outList.get(i).getProcess() + " "
+								+ outList.get(i).getComplictionTime() + "] ";
+					}
+					alert.setContentText(text);
+					alert.showAndWait();
 				}
 			}
 
