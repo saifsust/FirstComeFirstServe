@@ -3,6 +3,7 @@
  */
 package Design;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -44,6 +47,8 @@ public class appDesign extends Application implements constant {
 	private final String outLColor = "#D4E157";
 	private ObservableList<outputPair> outList = FXCollections.observableArrayList();
 	private ObservableList<inputPair> inList = FXCollections.observableArrayList();
+	private Image img = new Image(new File("res/back.jpeg").toURI().toString());
+	private ImageView imagV = new ImageView(img);
 
 	public appDesign() {
 
@@ -52,6 +57,8 @@ public class appDesign extends Application implements constant {
 	public appDesign(Stage primaryStage) {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
+
+		root.getChildren().add(imagV);
 		initial();
 
 		primaryStage.show();
